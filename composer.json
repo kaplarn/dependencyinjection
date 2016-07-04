@@ -1,0 +1,31 @@
+{
+    "name": "kaplarn/dependencyinjection",
+    "description": "Dependency Injection Container",
+    "keywords": ["dependency", "injection"],
+    "homepage": "https://github.com/kaplarn/dependencyinjection",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Káplár Norbert",
+            "email": "kaplarnorbert@webshopexperts.hu"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "kaplarn/annotation": "dev-master"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Kaplarn\\DependencyInjection\\": "src/",
+            "Kaplarn\\DependencyInjection\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/kaplarn/annotation"
+        }
+    ]
+}

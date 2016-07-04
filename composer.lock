@@ -1,0 +1,64 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "f0390559f0a184842b4e2af3df9868a5",
+    "content-hash": "9e4fe14e00ece82918deb95d12e78df6",
+    "packages": [
+        {
+            "name": "kaplarn/annotation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kaplarn/annotation.git",
+                "reference": "da7be9d43ca9c63b14a44da822b11765fb8d15b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kaplarn/annotation/zipball/da7be9d43ca9c63b14a44da822b11765fb8d15b7",
+                "reference": "da7be9d43ca9c63b14a44da822b11765fb8d15b7",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kaplarn\\Annotation\\": "src/",
+                    "Kaplarn\\Annotation\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Káplár Norbert",
+                    "email": "kaplarnorbert@webshopexperts.hu"
+                }
+            ],
+            "description": "Annotation manager",
+            "homepage": "https://github.com/kaplarn/annotation",
+            "keywords": [
+                "annotation"
+            ],
+            "support": {
+                "source": "https://github.com/kaplarn/annotation/tree/master",
+                "issues": "https://github.com/kaplarn/annotation/issues"
+            },
+            "time": "2016-07-03 16:47:05"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "kaplarn/annotation": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.4"
+    },
+    "platform-dev": []
+}
