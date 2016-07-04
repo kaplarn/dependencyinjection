@@ -46,6 +46,22 @@ class Factory
             $object->{$method->getName()}($realValue);
         }
         
+        foreach ($reflectionClass->getProperties() as $property) {
+            $annotation = new Annotation($property->getDocComment());
+            $value = $annotation->getValue();
+
+            if (!$value) {
+                continue;
+            }
+
+            $realValue = $annotation->hasNewInstance() && $annotation->getNewInstance()
+                ? $this->container->getNewInstance($value)
+                : $this->container->get($value);
+            
+            $method = 'set' . ucfirst($property->getName());
+            $object->{$method}($realValue);
+        }
+        
         return $object;
     }
 }

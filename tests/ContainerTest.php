@@ -45,6 +45,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         
         $this->assertInstanceOf('\Kaplarn\DependencyInjection\Tests\Stub\ClassA', $classA);
         $this->assertInstanceOf('\Kaplarn\DependencyInjection\Tests\Stub\ClassB', $classA->getClassB());
+        $this->assertInstanceOf('\Kaplarn\DependencyInjection\Tests\Stub\ClassC', $classA->getClassC());
     }
     
     /**
