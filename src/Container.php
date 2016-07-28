@@ -13,11 +13,6 @@ class Container
     protected $factory;
     
     /**
-     * @var Service
-     */
-    protected $service;
-    
-    /**
      * @var []
      */
     protected $data = [];
@@ -32,43 +27,38 @@ class Container
     }
     
     /**
-     * @param Service $service
+     * @return Factory
      */
-    public function setService(Service $service)
+    public function getFactory() : Factory
     {
-        $this->service = $service;
-        $this->service->setContainer($this);
+        return $this->factory;
     }
-    
+
     /**
-     * @param String $id
-     * @param Mixed $value
+     * @param string $id
+     * @param mixed $value
      */
-    public function set($id, $value)
+    public function set(string $id, $value)
     {
         $this->data[$id] = $value;
     }
     
     /**
      * @param String $id
+     * @param null $default
      * @return Mixed
      */
-    public function get($id)
+    public function get($id, $default = null)
     {
-        if (isset($this->data[$id])) {
+        if (array_key_exists($id, $this->data)) {
             return $this->data[$id];
         }
         
         if (class_exists($id)) {
-            $this->data[$id] = $this->factory->create($id);
-            return $this->data[$id];
+            return $this->data[$id] = $this->factory->create($id);
         }
         
-        if ($this->service->has($id)) {
-            $this->data[$id] = $this->service->get($id);
-        }
-
-        return isset($this->data[$id]) ? $this->data[$id] : null;
+        return $default;
     }
     
     /**

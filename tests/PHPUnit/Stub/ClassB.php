@@ -1,11 +1,11 @@
 <?php
 
-namespace Kaplarn\DependencyInjection\Tests\Stub\Cache;
+namespace Kaplarn\DependencyInjection\Tests\PHPUnit\Stub;
 
 /**
  * @author Káplár Norbert <kaplarnorbert@webshopexperts.hu>
  */
-interface ICache
+class ClassB
 {
     
 }

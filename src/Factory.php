@@ -2,8 +2,6 @@
 
 namespace Kaplarn\DependencyInjection;
 
-use Kaplarn\Annotation\Annotation;
-
 /**
  * @author Káplár Norbert <kaplarnorbert@webshopexperts.hu>
  */
@@ -23,45 +21,106 @@ class Factory
     }
     
     /**
+     * @return Container
+     */
+    public function getContainer() : Container
+    {
+        return $this->container;
+    }
+    
+    /**
      * @param String $class
      * @return Mixed
      */
     public function create($class)
     {
-        $object = new $class();
-        $reflectionClass = new \ReflectionClass($class);
-        
-        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-            $annotation = new Annotation($method->getDocComment());
-            $value = $annotation->getValue();
-            
-            if (!$value) {
+        $object = new $class();        
+        foreach ($this->getPublicSetterMethods($class) as $method) {
+            if (!$method->getNumberOfParameters()) {
                 continue;
             }
             
-            $realValue = $annotation->hasNewInstance() && $annotation->getNewInstance()
-                ? $this->container->getNewInstance($value)
-                : $this->container->get($value);
-            
-            $object->{$method->getName()}($realValue);
-        }
-        
-        foreach ($reflectionClass->getProperties() as $property) {
-            $annotation = new Annotation($property->getDocComment());
-            $value = $annotation->getValue();
+            $parameter = $method->getParameters()[0];
+            $value = $parameter->hasType() && class_exists((string)$parameter->getType())
+                ? $this->getValueByType($method, $parameter)
+                : $this->getValueByName($parameter);
 
-            if (!$value) {
-                continue;
-            }
-
-            $realValue = $annotation->hasNewInstance() && $annotation->getNewInstance()
-                ? $this->container->getNewInstance($value)
-                : $this->container->get($value);
-            
-            $method = 'set' . ucfirst($property->getName());
-            $object->{$method}($realValue);
+            $object->{$method->getName()}($value);
         }
         
         return $object;
+    }
+    
+    /**
+     * @param string $class
+     * @return \ReflectionMethod[]
+     */
+    protected function getPublicSetterMethods(string $class) : array
+    {
+        $reflectionClass = new \ReflectionClass($class);
+        
+        $result = [];
+        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            if (!$this->isSetter($method)) {
+                continue;
+            }
+            
+            $result[] = $method;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * @param \ReflectionMethod $method
+     * @return bool
+     */
+    protected function isSetter(\ReflectionMethod $method) : bool
+    {
+        $name = $method->getName();
+        
+        return 
+            strpos($name, 'set') === 0
+            && strtolower($name[3]) !== $name[3];
+    }
+    
+    /**
+     * @param \ReflectionMethod $method
+     * @param \ReflectionParameter $parameter
+     * @return mixed
+     */
+    protected function getValueByType(\ReflectionMethod $method, \ReflectionParameter $parameter)
+    {
+        $type = (string)$parameter->getType();
+        $default = $parameter->isOptional() ? $parameter->getDefaultValue() : null;
+        
+        return $this->needNewInstance($method)
+            ? $this->container->getNewInstance($type)
+            : $this->container->get($type, $default);
+    }
+
+    /**
+     * @param \ReflectionParameter $parameter
+     * @return mixed
+     */
+    protected function getValueByName(\ReflectionParameter $parameter)
+    {
+        $name = $parameter->getName();
+        $default = $parameter->isOptional() ? $parameter->getDefaultValue() : null;
+        
+        return $this->container->get($name, $default);
+    }
+    
+    /**
+     * @param \ReflectionMethod $method
+     * @return bool
+     */
+    protected function needNewInstance(\ReflectionMethod $method) : bool
+    {       
+        $name = $method->getName();
+        
+        return
+            strpos($name, 'New') === 3
+            && strtolower($name[6]) !== $name[6];
     }
 }
