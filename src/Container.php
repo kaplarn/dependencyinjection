@@ -8,6 +8,11 @@ namespace Kaplarn\DependencyInjection;
 class Container
 {
     /**
+     * @var Container
+     */
+    static protected $container;
+    
+    /**
      * @var Factory
      */
     protected $factory;
@@ -16,6 +21,19 @@ class Container
      * @var []
      */
     protected $data = [];
+
+    /**
+     * @return Container
+     */
+    public static function getInstance()
+    {
+        if (!self::$container) {
+            self::$container = new self();
+            self::$container->setFactory(new Factory());
+        }
+        
+        return self::$container;
+    }
     
     /**
      * @param Factory $factory
