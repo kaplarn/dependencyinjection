@@ -29,12 +29,27 @@ class Factory
     }
     
     /**
-     * @param String $class
-     * @return Mixed
+     * @param string $class
+     * @param bool $disableSetters
+     * @return mixed
      */
-    public function create($class)
+    public function create(string $class, bool $disableSetters = false)
     {
-        $object = new $class();        
+        $object = new $class();
+        if (!$disableSetters) {
+            $this->setUpObject($class, $object);
+        }
+        
+        return $object;
+    }
+
+    /**
+     * @param string $class
+     * @param mixed $object
+     * @return mixed
+     */
+    protected function setUpObject(string $class, $object)
+    {
         foreach ($this->getPublicSetterMethods($class) as $method) {
             if (!$method->getNumberOfParameters()) {
                 continue;

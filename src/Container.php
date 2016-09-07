@@ -62,29 +62,31 @@ class Container
     }
     
     /**
-     * @param String $id
+     * @param string $id
      * @param null $default
-     * @return Mixed
+     * @param bool $disableSetters
+     * @return mixed
      */
-    public function get($id, $default = null)
+    public function get(string $id, $default = null, bool $disableSetters = false)
     {
         if (array_key_exists($id, $this->data)) {
             return $this->data[$id];
         }
         
         if (class_exists($id)) {
-            return $this->data[$id] = $this->factory->create($id);
+            return $this->data[$id] = $this->factory->create($id, $disableSetters);
         }
         
         return $default;
     }
     
     /**
-     * @param String $class
-     * @return Mixed
+     * @param string $class
+     * @param bool $disableSetters
+     * @return mixed
      */
-    public function getNewInstance($class)
+    public function getNewInstance(string $class, bool $disableSetters = false)
     {
-        return $this->factory->create($class);
+        return $this->factory->create($class, $disableSetters);
     }
 }
