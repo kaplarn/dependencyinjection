@@ -29,6 +29,7 @@ class Container
     {
         if (!self::$container) {
             self::$container = new self();
+            self::$container->set(Container::class, self::$container);
             self::$container->setFactory(new Factory());
         }
         
